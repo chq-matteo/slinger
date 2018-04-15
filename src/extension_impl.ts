@@ -97,6 +97,7 @@ class Extension {
 
 		handle('slinger-distribute', windowActions.distribute);
 		handle('slinger-fill-available-space', windowActions.fillAvailableSpace);
+		handle('slinger-diagonal-scatter', windowActions.diagonalScatter);
 	}
 
 	private show_ui() {
