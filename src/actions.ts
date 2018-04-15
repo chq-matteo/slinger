@@ -13,6 +13,7 @@ interface WindowActions {
 	minimize(): void
 	unminimize(): void
 	distribute(): void
+	diagonalScatter(): void
 }
 
 module WindowActions {
@@ -322,9 +323,41 @@ module WindowActions {
 			if (currentWindow !== null) Sys.activateLater(currentWindow);
 		}
 
+		function diagonalScatter() {
+			const [currentWindow, windows] = Sys.visibleWindows();
+			if (windows.length === 0) return;
+			const bounds = Sys.workspaceArea(windows[0]);
+
+			if (windows.length === 1) {
+				Sys.maximize(windows[0]);
+			} else {
+				// TODO: scatter windows by selecting the closest matches for position+size
+				// instead of just distributing by index
+
+				const height = Math.floor(bounds.y * 3 / 4);
+				const width = Math.floor(height * 3 / 2);
+				const gapX = Math.floor(bounds.x / 32);
+				const gapY = Math.floor(bounds.y / 32);
+				const remainingWindows = windows.slice();
+				remainingWindows.sort(function(a: WindowType, b: WindowType) {
+					return Sys.windowTitle(a) > Sys.windowTitle(b) ? 1 : -1;
+				});
+				for (let i = 0; i < remainingWindows.length; i++) {
+					Sys.moveResize(remainingWindows[i], {
+						pos: {
+							x: (i+3)*gapX,
+							y: (i+3)*gapY
+						},
+						size: { x: width, y: height },
+					});					
+					Sys.activate(remainingWindows[i]);
+				}
+			}
+			if (currentWindow !== null) Sys.activateLater(currentWindow);
+		}
 		return {
 			moveAction, resizeAction, switchWorkspace, moveWindowWorkspace,
-			toggleMaximize, minimize, unminimize, selectWindow, swapWindow, distribute
+			toggleMaximize, minimize, unminimize, selectWindow, swapWindow, distribute, diagonalScatter
 		};
 	}
 }

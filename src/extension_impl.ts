@@ -96,6 +96,7 @@ class Extension {
 		handle('slinger-unminimize-window', windowActions.unminimize);
 
 		handle('slinger-distribute', windowActions.distribute);
+		handle('slinger-diagonal-scatter', windowActions.diagonalScatter);
 	}
 
 	private show_ui() {
