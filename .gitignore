@@ -1,4 +1,6 @@
 /extension/*.js
+/extension/.gup
+.gup
 !/extension/extension.js
 gschemas.compiled
 nix/local.tgz.gup
